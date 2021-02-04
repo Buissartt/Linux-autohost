@@ -18,16 +18,17 @@ Help()
 	echo -e "\e[32mUsage \e[39m: ${FILE_NAME} [OPTIONS]"
 	echo -e ""
 	echo -e "\e[32mExample \e[39m:"
-	echo -e "  ${FILE_NAME} -p=/home/user/myproject -n=blog (On Linux and WSL) "
+	echo -e "  ${FILE_NAME} -p=/home/user/myproject -n=blog (On Linux and WSL)"
 	echo -e "  ${FILE_NAME} -p=/mnt/d/Sites/myproject -n=blog (On WSL)"
+	echo -e "  ${FILE_NAME} -r=blog (On Linux and WSL)"
 	echo -e ""
 	echo -e "\e[32mOptions \e[39m:"
 	echo -e "  -n, --name    \e[33m(Required)\e[39m The name of the new website you want to create."
 	echo -e "  -p, --path    \e[33m(Required)\e[39m The path of the source folder that contains source files."
+	echo -e "  -r, --remove  \e[96m(Optional)\e[39m Remove a configuration (WIP)."
 	echo -e "  -q, --quiet   \e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
 	echo -e "  -V, --version \e[96m(Optional)\e[39m Print the script version."
 	echo -e "  -h, --help    \e[96m(Optional)\e[39m Print the help message."
-	echo -e "  -r, --remove  \e[96m(Optional)\e[39m Remove a configuration (WIP)."
 }
 
 ########################################
