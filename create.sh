@@ -1,5 +1,42 @@
 #!/bin/bash
 
+
+PROJECT_NAME=""
+PROJECT_PATH=""
+IS_QUIET=0
+
+
+for arg in "$@"
+do
+    case $arg in
+        -n|--name)
+        PROJECT_NAME="$2"
+        shift
+        ;;
+        -p|--path)
+        PROJECT_PATH="$2"
+        shift
+        ;;
+        -q|--quiet)
+        # Display nothing on the console
+        shift
+        ;;
+        -h|--help)
+        # display help
+        shift
+        ;;
+        -V|--version)
+        # display version
+        shift
+        ;;
+    esac
+done
+
+
+
+
+
+
 SOURCE=$1
 NAME=$2
 
