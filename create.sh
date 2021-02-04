@@ -41,6 +41,21 @@ else
 	HOSTS_PATH="/etc/hosts"
 fi
 
+# Vérification de l'existance des fichiers/répertoires
+
+  #lien symbolique
+  if [ -e /var/www/${NAME} ]
+  then 
+  echo "Error : Le fichier ou dossier /var/www/${NAME} existe déjà. Impossible de continuer."
+  exit
+  fi
+  #sites-available/nom.conf
+  if [ -e /etc/apache2/sites-available/${NAME}.conf ]
+  then 
+  echo "Error : Le fichier /etc/apache2/sites-available/${NAME}.conf existe déjà. Impossible de continuer."
+  exit
+  fi
+
 #Create symoblic link
 ln -s $1 /var/www/$2
 
