@@ -169,7 +169,9 @@ Remove()
 	echo -e "\e[33mWIP\e[39m"
 	# Ici, nous n'avons besoin que du PROJECT_NAME
 	# Supprimer les fichiers dans sites-available, sites-enabled et /var/www
+	# Supprimer les fichiers de logs dans /var/log/apache2 je crois
 	# Faire une vérification par y/n
+	# Restart le service apache2
 }
 
 QuietStdOut()
