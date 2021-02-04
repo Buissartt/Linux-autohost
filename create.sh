@@ -9,12 +9,12 @@ IS_QUIET=0
 for arg in "$@"
 do
     case $arg in
-        -n|--name)
-        PROJECT_NAME="$2"
+        -n=*|--name=*)
+        PROJECT_NAME="${arg#*=}"
         shift
         ;;
-        -p|--path)
-        PROJECT_PATH="$2"
+        -p=*|--path=*)
+        PROJECT_PATH="${arg#*=}"
         shift
         ;;
         -q|--quiet)
