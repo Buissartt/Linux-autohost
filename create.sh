@@ -1,5 +1,26 @@
 #!/bin/bash
 
+########################################
+# Help Commands
+
+Help()
+{
+  echo "Usage : ./create.sh [OPTIONS]"
+  echo "Example : ./create.sh /home/user/myproject blog"
+  echo ""
+  echo "Options :"
+  echo "  -n, --name    The name of the new website you want to create."
+  echo "  -p, --path    The path of the source folder that contains source files."
+  echo "  -q, --quiet   Quiet mode. Nothing is written to standart output."
+  echo "  -V, --version Print the script version"
+}
+
+########################################
+
+Version()
+{
+  echo "Current version : 0.0.1"
+}
 
 PROJECT_NAME=""
 PROJECT_PATH=""
@@ -23,11 +44,13 @@ do
         ;;
         -h|--help)
         # display help
-        shift
+        Help
+        exit
         ;;
         -V|--version)
         # display version
-        shift
+        Version
+        exit
         ;;
     esac
 done
