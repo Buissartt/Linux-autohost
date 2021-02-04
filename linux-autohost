@@ -167,6 +167,9 @@ Verif()
 Remove()
 {
 	echo -e "\e[33mWIP\e[39m"
+	# Ici, nous n'avons besoin que du PROJECT_NAME
+	# Supprimer les fichiers dans sites-available, sites-enabled et /var/www
+	# Faire une vérification par y/n
 }
 
 QuietStdOut()
