@@ -7,21 +7,25 @@ HOSTS_PATH=""
 OS=""
 #######################
 
+# Vérification que le script est lancé en root
 if [ "$EUID" -ne 0 ]; then
 	echo -e "\e[31mError \e[39m: You need to run this file using \e[33msudo\e[39m"
   	exit
 fi
 
+# Vérification que la distribution est debian based
 if [[ $(cat /etc/*-release | grep ID=debian) = "" ]] && [[ $(cat /etc/*-release | grep ID_LIKE=debian) = "" ]] ;then
 	echo -e "\e[31mError \e[39m: This script isn't accessible for non-debian based distribution."
   	exit
 fi
 
+# Vérification que apache2 est installé
 if [[ $(dpkg --get-selections | grep apache2) = "" ]] ;then
 	echo -e "\e[31mError \e[39m: You need to install \e[33mapache2\e[39m using \e[33msudo apt-get install apache2\e[39m."
   	exit
 fi
 
+# Vérication que mysql est installé
 if [[ $(dpkg --get-selections | grep mysql-common) = "" ]] ;then
 	echo -e "\e[31mError \e[39m: You need to install \e[33mmysql-common\e[39m using \e[33msudo apt-get install mysql-common\e[39m."
   	exit
