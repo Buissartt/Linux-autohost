@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100%" src="https://github.com/Buissartt/Linux-autohost/blob/main/linux-autohost-background.png" />
+  <img width="100%" src="https://github.com/Buissartt/Linux-autohost/blob/main/assets/linux-autohost-background.png" />
 </p>
 
 # Linux-autohost
