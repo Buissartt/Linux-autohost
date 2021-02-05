@@ -172,6 +172,7 @@ Remove()
 		# Faire une vérification par y/n
 		echo -e "\e[33mWIP\e[39m"
 
+
 		# Ici, nous n'avons besoin que du PROJECT_NAME 
 		# ${PROJECT_NAME} (variable globale)
 
