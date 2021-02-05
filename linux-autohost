@@ -2,6 +2,7 @@
 
 ### GLOBAL VARIABLE ###
 FILE_NAME="./linux-autohost"
+DOCUMENT_ROOT=""
 HOSTS_PATH=""
 OS=""
 #######################
@@ -38,6 +39,7 @@ Help()
 	echo -e "\e[32mOptions \e[39m:"
 	echo -e "  -n, --name    \e[33m(Required)\e[39m The name of the new website you want to create."
 	echo -e "  -p, --path    \e[33m(Required)\e[39m The path of the source folder that contains source files."
+	echo -e "  -d, --docroot \e[96m(Optional)\e[39m The path of the entry point directory within the project path"
 	echo -e "  -r, --remove  \e[96m(Optional)\e[39m Remove a configuration (WIP)."
 	echo -e "  -q, --quiet   \e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
 	echo -e "  -V, --version \e[96m(Optional)\e[39m Print the script version."
@@ -49,7 +51,7 @@ Help()
 
 Version()
 {
-	RestoreStdOut
+	RestoreForceStdOut
   	echo -e "\e[32mCurrent version : 0.0.1\e[39m"
 }
 
@@ -60,7 +62,7 @@ QuietStdOut
 
 # Create symoblic link
 ln -s ${PROJECT_PATH} /var/www/${PROJECT_NAME}
-echo -e "\e[32mInfo \e[39m: Symbolic link created."
+echo -e "\e[32mInfo \e[39m: \e[32m(/var/www/${PROJECT_NAME})\e[39m Symbolic link created"
 
 # Write the new config file
 cat >> /etc/apache2/sites-available/${PROJECT_NAME}.conf <<EOL
@@ -68,7 +70,7 @@ cat >> /etc/apache2/sites-available/${PROJECT_NAME}.conf <<EOL
 		ServerName www.${PROJECT_NAME}.local
 		ServerAlias ${PROJECT_NAME}.local
 		ServerAdmin webmaster@localhost
-		DocumentRoot /var/www/${PROJECT_NAME}
+		DocumentRoot /var/www/${PROJECT_NAME}${DOCUMENT_ROOT}
 
 		<Directory /var/www/>
 				Options Indexes FollowSymLinks MultiViews
@@ -81,14 +83,14 @@ cat >> /etc/apache2/sites-available/${PROJECT_NAME}.conf <<EOL
 		CustomLog /var/log/apache2/error.${PROJECT_NAME}.local.log combined
 </VirtualHost>
 EOL
-echo -e "\e[32mInfo \e[39m: /etc/apache2/sites-available/${PROJECT_NAME}.conf created and updated."
+echo -e "\e[32mInfo \e[39m: \e[32m(/etc/apache2/sites-available/${PROJECT_NAME}.conf)\e[39m Configuration file created and updated"
 
 # Enable the new conf file
-echo -e "\e[32mInfo \e[39m: Enabling /etc/apache2/sites-available/${PROJECT_NAME}.conf file..."
+echo -e "\e[32mInfo \e[39m: Enabling \e[32m/etc/apache2/sites-available/${PROJECT_NAME}.conf\e[39m file..."
 QuietForceStdOut
 a2ensite ${PROJECT_NAME}.conf
 RestoreStdOut
-echo -e "\e[32mInfo \e[39m: /etc/apache2/sites-available/${PROJECT_NAME}.conf enabled"
+echo -e "\e[32mInfo \e[39m: \e[32m/etc/apache2/sites-available/${PROJECT_NAME}.conf\e[39m enabled"
 
 #DNS
 if [[ $OS = "Linux" ]]; then
@@ -101,12 +103,12 @@ cat >> ${HOSTS_PATH} <<EOL
 127.0.0.1 	${PROJECT_NAME}.local
 #####################################
 EOL
-echo -e "\e[32mInfo \e[39m: ${HOSTS_PATH} updated."
+echo -e "\e[32mInfo \e[39m: ${HOSTS_PATH} updated"
 else 
 	RestoreForceStdOut
 	echo ""
 	echo -e "\e[33mImportant \e[39m: Host file can not be automatically modified, you'll need to update it manually."
-	echo -e "Update it by adding the following lines to the \e[33mC:\Windows\System32\drivers\etc\hosts\e[39m or directly on WSL on \e[33m${HOSTS_PATH}\e[39m :"
+	echo -e "Update it by adding the following lines to the \e[33mC:\Windows\System32\drivers\\etc\hosts\e[39m or directly on WSL on \e[33m${HOSTS_PATH}\e[39m :"
 	echo "::1       www.${PROJECT_NAME}.local"
 	echo "127.0.0.1 www.${PROJECT_NAME}.local"
 	echo "::1       ${PROJECT_NAME}.local"
@@ -116,11 +118,11 @@ else
 fi
 
 # Restart the apache's service
-echo -e "\e[32mInfo \e[39m: Restarting apache2..."
+echo -e "\e[32mInfo \e[39m: Reloading apache2..."
 QuietForceStdOut
-service apache2 restart
+service apache2 reload
 RestoreStdOut
-echo -e "\e[32mInfo \e[39m: apache2 successfully restarted"
+echo -e "\e[32mInfo \e[39m: apache2 successfully reloaded"
 echo ""
 echo "Now, check out the folloxing url to access your new local website : http://${PROJECT_NAME}.local"
 
@@ -151,8 +153,15 @@ Verif()
 		exit
 	fi
 
+	# Document root doesn't exist
+	if [[ ! -d "${PROJECT_PATH}${DOCUMENT_ROOT}" || ! -e "${PROJECT_PATH}${DOCUMENT_ROOT}" ]]; then
+		echo -e "\e[31mError \e[39m: Invalid arguments. ${PROJECT_PATH}${DOCUMENT_ROOT} is not valid entry directory"
+		echo -e "For more informations, type \e[33m${FILE_NAME} -h\e[39m"
+		exit
+	fi
+
 	# Symbolic link already exists
-	if [[ -e /var/www/${PROJECT_NAME} && -L /var/www/${PROJECT_NAME} ]]; then 
+	if [[ -e /var/www/${PROJECT_NAME} ]]; then 
 		echo -e "\e[31mError \e[39m: The directory or file /var/www/${PROJECT_NAME} already exists."
 		echo -e "For more informations, type \e[33m${FILE_NAME} -h\e[39m"
 		exit
@@ -177,35 +186,42 @@ Remove()
 	done
 
 	if [ ! -z $answer ] && ([ $answer = "y" ] || [ $answer = "yes" ]); then
-		# Ici, nous n'avons besoin que du PROJECT_NAME 
-		# ${PROJECT_NAME} (variable globale)
+		QuietStdOut
 
-		# Supprimer les fichiers dans sites-available, sites-enabled et /var/www
-		rm -R /var/www/${PROJECT_NAME}
-		echo -e "\e[32mInfo \e[39m: Directory (/var/www/${PROJECT_NAME}) deleted."
-		rm    /etc/apache2/sites-available/${PROJECT_NAME}.conf
-		rm    /etc/apache2/sites-enabled/${PROJECT_NAME}.conf
-		echo -e "\e[32mInfo \e[39m: Configuration files deleted."
+		# Supprimer les fichiers dans /var/www
+		if [ -e /var/www/${PROJECT_NAME} ]; then
+			rm -R /var/www/${PROJECT_NAME}	
+			echo -e "\e[32mInfo \e[39m: Directory \e[32m(/var/www/${PROJECT_NAME})\e[39m deleted"
+		fi
 
+		# Supprimer les fichiers dans sites-available et sites-enabled
+		if [ -e /etc/apache2/sites-available/${PROJECT_NAME}.conf ]; then
+			rm    /etc/apache2/sites-available/${PROJECT_NAME}.conf
+			rm    /etc/apache2/sites-enabled/${PROJECT_NAME}.conf
+			echo -e "\e[32mInfo \e[39m: Apache configuration files deleted"
+		fi
+		
 		# Supprimer les fichiers de logs dans /var/log/apache2 je crois
-		rm    /var/log/apache2/error.${PROJECT_NAME}.local.log
-		echo -e "\e[32mInfo \e[39m: Log file deleted."
+		if [ -e /var/log/apache2/error.${PROJECT_NAME}.local.log ]; then
+			rm    /var/log/apache2/error.${PROJECT_NAME}.local.log
+			echo -e "\e[32mInfo \e[39m: Apache log file deleted"
+		fi
 			
 		if [[ $OS = "Linux" ]]; then
-			# Informations qu'il faut manuelement nettoyer le fichier hosts
+			# Informations qu'il faut manuellement nettoyer le fichier hosts
 			sed -i /"## Autogenerated by Linux-autohost ##"/d ${HOSTS_PATH}
 			sed -i /"::1       	www.${PROJECT_NAME}.local"/d ${HOSTS_PATH}
 			sed -i /"127.0.0.1 	www.${PROJECT_NAME}.local"/d ${HOSTS_PATH}
 			sed -i /"::1       	${PROJECT_NAME}.local"/d ${HOSTS_PATH}
 			sed -i /"127.0.0.1 	${PROJECT_NAME}.local"/d ${HOSTS_PATH}
 			sed -i /"#####################################"/d ${HOSTS_PATH}
-			echo -e "\e[32mInfo \e[39m: Hosts file cleaned."
+			echo -e "\e[32mInfo \e[39m: Hosts file updated"
 
 		else
 			RestoreForceStdOut
 			echo ""
 			echo -e "\e[33mImportant \e[39m: Host file can not be automatically modified, you'll need to update it manually."
-			echo -e "Update it by removing the following lines to the \e[33mC:\Windows\System32\drivers\etc\hosts\e[39m or directly on WSL on \e[33m${HOSTS_PATH}\e[39m :"
+			echo -e "Update it by removing the following lines to the \e[33mC:/Windows/System32/drivers/etc/hosts\e[39m or directly on WSL on \e[33m${HOSTS_PATH}\e[39m :"
 			echo "::1       www.${PROJECT_NAME}.local"
 			echo "127.0.0.1 www.${PROJECT_NAME}.local"
 			echo "::1       ${PROJECT_NAME}.local"
@@ -213,12 +229,13 @@ Remove()
 			echo ""
 			QuietStdOut
 		fi
-		# Restart le service apache2
-		echo -e "\e[32mInfo \e[39m: Restarting apache2..."
+
+		# Reload le service apache2
+		echo -e "\e[32mInfo \e[39m: Reloading apache2..."
 		QuietForceStdOut
-		service apache2 restart
+		service apache2 reload
 		RestoreStdOut
-		echo -e "\e[32mInfo \e[39m: apache2 successfully restarted"
+		echo -e "\e[32mInfo \e[39m: apache2 successfully reloaded"
 	else
 		exit
 	fi
@@ -248,6 +265,9 @@ RestoreForceStdOut()
 	exec 1>&6 # restore default stdout
 }
 
+function join { local IFS="$1"; shift; echo "$*"; }
+
+
 for arg in "$@"
 do
 	case $arg in
@@ -258,6 +278,22 @@ do
 		;;
 		-p=*|--path=*)
 			PROJECT_PATH="${arg#*=}"
+			# Split string by /
+			PROJECT_PATH=$(echo $PROJECT_PATH | tr "/" "\n")
+			# Join by /
+			PROJECT_PATH=/$(join / ${PROJECT_PATH[@]})
+			shift
+			shift
+		;;
+		-d=*|--docroot=*)
+			DOCUMENT_ROOT="${arg#*=}"
+			if [[ -n $DOCUMENT_ROOT ]]; then
+				# Split string by /
+				DOCUMENT_ROOT=$(echo $DOCUMENT_ROOT | tr "/" "\n")
+				# Join by /
+				DOCUMENT_ROOT=/$(join / ${DOCUMENT_ROOT[@]})
+			fi
+		
 			shift
 			shift
 		;;
@@ -285,9 +321,6 @@ do
 done
 
 Verif
-
-if [[ $ERROR -eq 0 ]]; then
-	Main
-fi
-RestoreStdOut
+Main
+RestoreForceStdOut
 exit
