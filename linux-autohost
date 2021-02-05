@@ -22,8 +22,8 @@ if [[ $(dpkg --get-selections | grep apache2) = "" ]] ;then
   	exit
 fi
 
-if [[ $(dpkg --get-selections | grep mysql-server) = "" ]] ;then
-	echo -e "\e[31mError \e[39m: You need to install \e[33mmysql-server\e[39m using \e[33msudo apt-get install mysql-server\e[39m."
+if [[ $(dpkg --get-selections | grep mysql-common) = "" ]] ;then
+	echo -e "\e[31mError \e[39m: You need to install \e[33mmysql-common\e[39m using \e[33msudo apt-get install mysql-common\e[39m."
   	exit
 fi
 
