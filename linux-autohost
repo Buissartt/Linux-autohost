@@ -6,6 +6,7 @@ DOCUMENT_ROOT=""
 HOSTS_PATH=""
 CREATE_DATABASE=0
 OS=""
+CURRENT_VERSION="1.0.0"
 #######################
 
 # Vérification que le script est lancé en root
@@ -73,7 +74,7 @@ Help()
 Version()
 {
 	RestoreForceStdOut
-  	echo -e "\e[32mCurrent version : 0.0.1\e[39m"
+  	echo -e "\e[32mCurrent version : ${CURRENT_VERSION}\e[39m"
 }
 
 Main()
