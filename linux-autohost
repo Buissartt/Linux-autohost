@@ -258,21 +258,51 @@ Remove()
 
 		# Supprimer les fichiers dans /var/www
 		if [ -e /var/www/${PROJECT_NAME} ]; then
-			rm -R /var/www/${PROJECT_NAME}	
-			echo -e "\e[32mInfo \e[39m: Directory \e[32m(/var/www/${PROJECT_NAME})\e[39m deleted"
+			rm -R /var/www/${PROJECT_NAME}
+			if [ $? -eq 0 ]; then
+				RestoreStdOut
+				echo -e "\e[32mInfo \e[39m: Directory \e[32m(/var/www/${PROJECT_NAME})\e[39m deleted"
+			else
+				RestoreForceStdOut
+				echo -e "\e[31mError \e[39m: Cannot delete \e[32m/var/www/${PROJECT_NAME}\e[39m. Try deleting it by yourself"
+				exit
+			fi	
+			
 		fi
 
 		# Supprimer les fichiers dans sites-available et sites-enabled
 		if [ -e /etc/apache2/sites-available/${PROJECT_NAME}.conf ]; then
 			rm    /etc/apache2/sites-available/${PROJECT_NAME}.conf
+			if [ $? -eq 0 ]; then
+				RestoreStdOut
+				echo -e "\e[32mInfo \e[39m: File \e[32m(/etc/apache2/sites-available/${PROJECT_NAME}.conf)\e[39m deleted"
+			else
+				RestoreForceStdOut
+				echo -e "\e[31mError \e[39m: Cannot delete \e[32m/etc/apache2/sites-available/${PROJECT_NAME}.conf\e[39m. Try deleting it by yourself"
+				exit
+			fi	
 			rm    /etc/apache2/sites-enabled/${PROJECT_NAME}.conf
-			echo -e "\e[32mInfo \e[39m: Apache configuration files deleted"
+			if [ $? -eq 0 ]; then
+				RestoreStdOut
+				echo -e "\e[32mInfo \e[39m: File \e[32m(/etc/apache2/sites-enabled/${PROJECT_NAME}.conf)\e[39m deleted"
+			else
+				RestoreForceStdOut
+				echo -e "\e[31mError \e[39m: Cannot delete \e[32m/etc/apache2/sites-enabled/${PROJECT_NAME}.conf\e[39m. Try deleting it by yourself"
+				exit
+			fi	
 		fi
 		
 		# Supprimer les fichiers de logs dans /var/log/apache2 je crois
 		if [ -e /var/log/apache2/error.${PROJECT_NAME}.local.log ]; then
 			rm    /var/log/apache2/error.${PROJECT_NAME}.local.log
-			echo -e "\e[32mInfo \e[39m: Apache log file deleted"
+			if [ $? -eq 0 ]; then
+				RestoreStdOut
+				echo -e "\e[32mInfo \e[39m: File \e[32m(/var/log/apache2/error.${PROJECT_NAME}.local.log)\e[39m deleted"
+			else
+				RestoreForceStdOut
+				echo -e "\e[31mError \e[39m: Cannot delete \e[32m/var/log/apache2/error.${PROJECT_NAME}.local.log\e[39m. Try deleting it by yourself"
+				exit
+			fi	
 		fi
 			
 		if [[ $OS = "Linux" ]]; then
@@ -283,6 +313,14 @@ Remove()
 			sed -i /"::1       	${PROJECT_NAME}.local"/d ${HOSTS_PATH}
 			sed -i /"127.0.0.1 	${PROJECT_NAME}.local"/d ${HOSTS_PATH}
 			sed -i /"#####################################"/d ${HOSTS_PATH}
+			if [ $? -eq 0 ]; then
+				RestoreStdOut
+				echo -e "\e[32mInfo \e[39m: File \e[32m(${HOSTS_PATH})\e[39m updated"
+			else
+				RestoreForceStdOut
+				echo -e "\e[31mError \e[39m: Cannot update \e[32m${HOSTS_PATH}\e[39m. Try updating it by yourself"
+				exit
+			fi	
 			echo -e "\e[32mInfo \e[39m: Hosts file updated"
 
 		else
@@ -302,8 +340,16 @@ Remove()
 		echo -e "\e[32mInfo \e[39m: Reloading apache2..."
 		QuietForceStdOut
 		service apache2 reload
+		if [ $? -eq 0 ]; then
+			RestoreStdOut
+			echo -e "\e[32mInfo \e[39m: apache2 successfully reloaded"
+		else
+			RestoreForceStdOut
+			echo -e "\e[31mError \e[39m: Cannot reload apache service. Try doing it by yourself"
+			exit
+		fi	
 		RestoreStdOut
-		echo -e "\e[32mInfo \e[39m: apache2 successfully reloaded"
+		
 	else
 		exit
 	fi
