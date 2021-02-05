@@ -159,7 +159,7 @@ QuietForceStdOut
 service apache2 reload
 if [ $? -eq 0 ]; then
 	RestoreStdOut
-	echo -e "\e[32mInfo \e[39m: Table successfully created"
+	echo -e "\e[32mInfo \e[39m: Apache service successfully reloaded"
 else
 	RestoreForceStdOut
 	echo -e "\e[31mError \e[39m: Cannot reload apache service. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
@@ -171,22 +171,22 @@ echo ""
 
 if [[ CREATE_DATABASE -eq 1 ]]; then
 	RestoreForceStdOut
-	read -p "Enter database username : " USERNAME
+	read -p "Enter mysql username : " USERNAME
 	while [ -z $USERNAME ]; do
-		read -p "Enter database username : " USERNAME
+		read -p "Enter mysql username : " USERNAME
 	done
 
-	read -p "Enter table name : " TABLE_NAME
-	while [ -z $TABLE_NAME ]; do
-		read -p "Enter table name : " TABLE_NAME
+	read -p "Enter new database name : " DATABASE_NAME
+	while [ -z $DATABASE_NAME ]; do
+		read -p "Enter new database name : " DATABASE_NAME
 	done
 
-	mysql -u user -p -e "create database ${TABLE_NAME}";
+	mysql -u $USERNAME -p -e "create database ${DATABASE_NAME}";
 	if [ $? -eq 0 ]; then
 		QuietStdOut
-		echo -e "\e[32mInfo \e[39m: Table successfully created"
+		echo -e "\e[32mInfo \e[39m: Database successfully created"
 	else
-		echo -e "\e[31mError \e[39m: Cannot create database table. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
+		echo -e "\e[31mError \e[39m: Cannot create database. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
 		exit
 	fi
 fi
@@ -293,7 +293,7 @@ Remove()
 			fi	
 		fi
 		
-		# Supprimer les fichiers de logs dans /var/log/apache2 je crois
+		# Supprimer les fichiers de logs dans /var/log/apache2
 		if [ -e /var/log/apache2/error.${PROJECT_NAME}.local.log ]; then
 			rm    /var/log/apache2/error.${PROJECT_NAME}.local.log
 			if [ $? -eq 0 ]; then
