@@ -12,7 +12,7 @@ if [ "$EUID" -ne 0 ]; then
   	exit
 fi
 
-if ([ $(cat /etc/*-release | grep ID=debian) != "" ] || ([ $(cat /etc/*-release | grep ID=debian) = "" ] && [ $(cat /etc/*-release | grep ID_LIKE=debian) != "" ])) ;then
+if [[ $(cat /etc/*-release | grep ID=debian) != "" ]] || ([[ $(cat /etc/*-release | grep ID=debian) = "" ]] && [[ $(cat /etc/*-release | grep ID_LIKE=debian) != "" ]]) ;then
 	echo -e "\e[31mError \e[39m: This script isn't accessible for non-debian based distribution."
   	exit
 fi
