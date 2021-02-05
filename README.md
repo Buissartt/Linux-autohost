@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="100%" src="https://github.com/Buissartt/Linux-autohost/blob/main/assets/linux-autohost-background.png" />
+</p>
+
 # Linux-autohost
 A script to create a new local website on an apache server
 
