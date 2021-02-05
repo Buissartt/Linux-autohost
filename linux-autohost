@@ -4,6 +4,7 @@
 FILE_NAME=$0
 DOCUMENT_ROOT=""
 HOSTS_PATH=""
+CREATE_DATABASE=0
 OS=""
 #######################
 
@@ -56,13 +57,14 @@ Help()
 	echo -e "  ${FILE_NAME} -r=blog (On Linux and WSL)"
 	echo -e ""
 	echo -e "\e[32mOptions \e[39m:"
-	echo -e "  -n, --name    \e[33m(Required)\e[39m The name of the new website you want to create."
-	echo -e "  -p, --path    \e[33m(Required)\e[39m The path of the source folder that contains source files."
-	echo -e "  -d, --docroot \e[96m(Optional)\e[39m The path of the entry point directory within the project path"
-	echo -e "  -r, --remove  \e[96m(Optional)\e[39m Remove a configuration (WIP)."
-	echo -e "  -q, --quiet   \e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
-	echo -e "  -V, --version \e[96m(Optional)\e[39m Print the script version."
-	echo -e "  -h, --help    \e[96m(Optional)\e[39m Print the help message."
+	echo -e "  -n, --name    	\e[33m(Required)\e[39m The name of the new website you want to create."
+	echo -e "  -p, --path    	\e[33m(Required)\e[39m The path of the source folder that contains source files."
+	echo -e "  -d, --docroot 	\e[96m(Optional)\e[39m The path of the entry point directory within the project path"
+	echo -e "  -r, --remove  	\e[96m(Optional)\e[39m Remove a configuration."
+	echo -e "  -q, --quiet   	\e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
+	echo -e "  -D, --database  	\e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
+	echo -e "  -V, --version 	\e[96m(Optional)\e[39m Print the script version."
+	echo -e "  -h, --help    	\e[96m(Optional)\e[39m Print the help message."
 }
 
 ########################################
@@ -81,7 +83,15 @@ QuietStdOut
 
 # Create symoblic link
 ln -s ${PROJECT_PATH} /var/www/${PROJECT_NAME}
-echo -e "\e[32mInfo \e[39m: \e[32m(/var/www/${PROJECT_NAME})\e[39m Symbolic link created"
+if [ $? -eq 0 ]; then
+	RestoreStdOut
+	echo -e "\e[32mInfo \e[39m: \e[32m(/var/www/${PROJECT_NAME})\e[39m Symbolic link created"
+else
+	RestoreForceStdOut
+	echo -e "\e[31mError \e[39m: Cannot create the symbolic link. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
+	exit
+fi
+
 
 # Write the new config file
 cat >> /etc/apache2/sites-available/${PROJECT_NAME}.conf <<EOL
@@ -108,8 +118,14 @@ echo -e "\e[32mInfo \e[39m: \e[32m(/etc/apache2/sites-available/${PROJECT_NAME}.
 echo -e "\e[32mInfo \e[39m: Enabling \e[32m/etc/apache2/sites-available/${PROJECT_NAME}.conf\e[39m file..."
 QuietForceStdOut
 a2ensite ${PROJECT_NAME}.conf
-RestoreStdOut
-echo -e "\e[32mInfo \e[39m: \e[32m/etc/apache2/sites-available/${PROJECT_NAME}.conf\e[39m enabled"
+if [ $? -eq 0 ]; then
+	RestoreStdOut
+	echo -e "\e[32mInfo \e[39m: \e[32m/etc/apache2/sites-available/${PROJECT_NAME}.conf\e[39m enabled"
+else
+	RestoreForceStdOut
+	echo -e "\e[31mError \e[39m: Cannot enable ${PROJECT_NAME}.conf file. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
+	exit
+fi
 
 #DNS
 if [[ $OS = "Linux" ]]; then
@@ -140,10 +156,43 @@ fi
 echo -e "\e[32mInfo \e[39m: Reloading apache2..."
 QuietForceStdOut
 service apache2 reload
-RestoreStdOut
-echo -e "\e[32mInfo \e[39m: apache2 successfully reloaded"
+if [ $? -eq 0 ]; then
+	RestoreStdOut
+	echo -e "\e[32mInfo \e[39m: Table successfully created"
+else
+	RestoreForceStdOut
+	echo -e "\e[31mError \e[39m: Cannot reload apache service. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
+	exit
+fi
+
 echo ""
-echo "Now, check out the folloxing url to access your new local website : http://${PROJECT_NAME}.local"
+
+
+if [[ CREATE_DATABASE -eq 1 ]]; then
+	RestoreForceStdOut
+	read -p "Enter database username : " USERNAME
+	while [ -z $USERNAME ]; do
+		read -p "Enter database username : " USERNAME
+	done
+
+	read -p "Enter table name : " TABLE_NAME
+	while [ -z $TABLE_NAME ]; do
+		read -p "Enter table name : " TABLE_NAME
+	done
+
+	mysql -u user -p -e "create database ${TABLE_NAME}";
+	if [ $? -eq 0 ]; then
+		QuietStdOut
+		echo -e "\e[32mInfo \e[39m: Table successfully created"
+	else
+		echo -e "\e[31mError \e[39m: Cannot create database table. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
+		exit
+	fi
+fi
+
+
+echo ""
+echo "Now, check out the following url to access your new local website : http://${PROJECT_NAME}.local"
 
 }
 
@@ -314,6 +363,10 @@ do
 			fi
 		
 			shift
+			shift
+		;;
+		-D|--database) # Display nothing on the console
+			CREATE_DATABASE=1
 			shift
 		;;
 		-r=*|--remove=*)
