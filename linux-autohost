@@ -12,6 +12,16 @@ if [ "$EUID" -ne 0 ]; then
   	exit
 fi
 
+if [[ $(dpkg --get-selections | grep apache2) = "" ]] ;then
+	echo -e "\e[31mError \e[39m: You need to install \e[33mapache2\e[39m using \e[33msudo apt-get install apache2\e[39m"
+  	exit
+fi
+
+if [[ $(dpkg --get-selections | grep mysql-server) = "" ]] ;then
+	echo -e "\e[31mError \e[39m: You need to install \e[33mmysql-server\e[39m using \e[33msudo apt-get install mysql-server\e[39m"
+  	exit
+fi
+
 exec 6>&1 # Save default stdout to position 6
 
 #Detect if it is a WSL or a native linux
