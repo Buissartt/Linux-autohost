@@ -40,3 +40,13 @@ Options :
   ```
 
 # Options
+| Option name       | Flags           | Description                                                                     |
+|-------------------|-----------------|---------------------------------------------------------------------------------|
+| Name              | -n, --name      | This flag is required while he allow you to specify the name of the new project |
+| Source path       | -p, --path      | The path flag contains the path from root to your project                       |
+| Document root     | -d, --docroot   | This optionnal flag allow you to modify the document root path of the project   |
+| Remove            | -r, --remove    | If this flag is specified, the project will be deleted                          |
+| Quiet mode        | -q, --quiet     | With quiet mode enable, nothing is written to standart output                   |
+| Database creation | -D, --database  | If this flag is used, a mysql database will be created                          |
+| Version           | -V, --version   | Display the current version of the script and then exit                         |
+| Help              | -h, --help      | Display the help message and then exit                                          |
