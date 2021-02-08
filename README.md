@@ -3,5 +3,5 @@
 </p>
 
 # Overview
-**Linux-autohost** is a really small Bash script which automates the configuration of a new local web site on Debian or WSL.
+**Linux-autohost** is a really small Bash script which automates the configuration of a new local web site on Debian distributions or WSL based on Debian distributions.
 
