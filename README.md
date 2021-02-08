@@ -53,13 +53,13 @@ sudo linux-autohost -n=blog -p=path/to/project
 
 
 # Options
-| Option name       | Flags             | Required | Description                                                                     |
-|-------------------|:-----------------:|:--------:|---------------------------------------------------------------------------------|
-| Name              | -n<br>--name      | - [X]     | This flag is required while he allow you to specify the name of the new project |
-| Source path       | -p<br>--path      | false    | The path flag contains the path from root to your project                       |
-| Document root     | -d<br>--docroot   | false    | This optionnal flag allow you to modify the document root path of the project   |
-| Remove            | -r<br>--remove    | false    | If this flag is specified, the project will be deleted                          |
-| Quiet mode        | -q<br>--quiet     | false    | With quiet mode enable, nothing is written to standart output                   |
-| Database creation | -D<br>--database  | false    | If this flag is used, a mysql database will be created                          |
-| Version           | -V<br>--version   | false    | Display the current version of the script and then exit                         |
-| Help              | -h<br>--help      | false    | Display the help message and then exit                                          |
+| Option name       | Flags             | Required                 | Description                                                                     |
+|-------------------|:-----------------:|:------------------------:|---------------------------------------------------------------------------------|
+| Name              | -n<br>--name      | <ul><li>- [x] </li></ul> | This flag is required while he allow you to specify the name of the new project |
+| Source path       | -p<br>--path      | <ul><li>- [ ] </li></ul> | The path flag contains the path from root to your project                       |
+| Document root     | -d<br>--docroot   | <ul><li>- [ ] </li></ul> | This optionnal flag allow you to modify the document root path of the project   |
+| Remove            | -r<br>--remove    | <ul><li>- [ ] </li></ul> | If this flag is specified, the project will be deleted                          |
+| Quiet mode        | -q<br>--quiet     | <ul><li>- [ ] </li></ul> | With quiet mode enable, nothing is written to standart output                   |
+| Database creation | -D<br>--database  | <ul><li>- [ ] </li></ul> | If this flag is used, a mysql database will be created                          |
+| Version           | -V<br>--version   | <ul><li>- [ ] </li></ul> | Display the current version of the script and then exit                         |
+| Help              | -h<br>--help      | <ul><li>- [ ] </li></ul> | Display the help message and then exit                                          |
