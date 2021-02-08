@@ -63,7 +63,7 @@ Help()
 	echo -e "  -d, --docroot 	\e[96m(Optional)\e[39m The path of the entry point directory within the project path"
 	echo -e "  -r, --remove  	\e[96m(Optional)\e[39m Remove a configuration."
 	echo -e "  -q, --quiet   	\e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
-	echo -e "  -D, --database  	\e[96m(Optional)\e[39m Quiet mode. Nothing is written to standart output."
+	echo -e "  -D, --database  	\e[96m(Optional)\e[39m Create a database by passing its name."
 	echo -e "  -V, --version 	\e[96m(Optional)\e[39m Print the script version."
 	echo -e "  -h, --help    	\e[96m(Optional)\e[39m Print the help message."
 }
@@ -79,6 +79,14 @@ Version()
 
 Main()
 {
+
+RestoreForceStdOut
+
+if [[ -z $PROJECT_PATH ]]; then
+	echo -e "\e[31mError \e[39m: Invalid arguments. You need to specify the project path."
+	echo -e "For more informations, type \e[33m${FILE_NAME} -h\e[39m"
+	exit
+fi
 
 QuietStdOut
 
@@ -202,14 +210,14 @@ Verif()
 	RestoreForceStdOut
 
 	# Empty project name or path
-	if [[ -z $PROJECT_NAME || -z $PROJECT_PATH ]]; then
-		echo -e "\e[31mError \e[39m: Invalid arguments. You need to specify both project name and project path."
+	if [[ -z $PROJECT_NAME ]]; then
+		echo -e "\e[31mError \e[39m: Invalid arguments. You need to specify the project name."
 		echo -e "For more informations, type \e[33m${FILE_NAME} -h\e[39m"
 		exit
 	fi
 
 	# Source path doesn't exist
-	if [[ ! -e $PROJECT_PATH ]]; then
+	if [[ ! -e $PROJECT_PATH && -z $PROJECT_PATH ]]; then
 		echo -e "\e[31mError \e[39m: Invalid arguments. ${PROJECT_PATH} does not exist."
 		echo -e "For more informations, type \e[33m${FILE_NAME} -h\e[39m"
 		exit
@@ -417,8 +425,7 @@ do
 			shift
 		;;
 		-r=*|--remove=*)
-			PROJECT_NAME="${arg#*=}"
-			Remove $PROJECT_NAME
+			Remove
 			shift
 			shift
 			exit
