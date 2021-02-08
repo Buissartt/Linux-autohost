@@ -38,11 +38,24 @@ Options :
   -V, --version         (Optional) Print the script version.
   -h, --help            (Optional) Print the help message.
   ```
+  
+## New site creation
+Different options are available to create a new web site configuration. Two flags are required : **Name** and **Path**. Name have to provided using the `-n` flag. Then, then path. Using the `-p` flag, you can specify the path of your project on your hard drive.
+> On WSL, you can access your hard drives using the `/mnt` directory.
+
+```bash
+sudo linux-autohost -n=blog -p=path/to/project
+```
+
+
+
+## Remove an old configuration
+
 
 # Options
 | Option name       | Flags             | Required | Description                                                                     |
 |-------------------|:-----------------:|:--------:|---------------------------------------------------------------------------------|
-| Name              | -n<br>--name      | true     | This flag is required while he allow you to specify the name of the new project |
+| Name              | -n<br>--name      | [X]     | This flag is required while he allow you to specify the name of the new project |
 | Source path       | -p<br>--path      | false    | The path flag contains the path from root to your project                       |
 | Document root     | -d<br>--docroot   | false    | This optionnal flag allow you to modify the document root path of the project   |
 | Remove            | -r<br>--remove    | false    | If this flag is specified, the project will be deleted                          |
