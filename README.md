@@ -55,7 +55,7 @@ sudo linux-autohost -n=blog -p=path/to/project
 # Options
 | Option name       | Flags             | Required | Description                                                                     |
 |-------------------|:-----------------:|:--------:|---------------------------------------------------------------------------------|
-| Name              | -n<br>--name      | [X]     | This flag is required while he allow you to specify the name of the new project |
+| Name              | -n<br>--name      | - [X]     | This flag is required while he allow you to specify the name of the new project |
 | Source path       | -p<br>--path      | false    | The path flag contains the path from root to your project                       |
 | Document root     | -d<br>--docroot   | false    | This optionnal flag allow you to modify the document root path of the project   |
 | Remove            | -r<br>--remove    | false    | If this flag is specified, the project will be deleted                          |
