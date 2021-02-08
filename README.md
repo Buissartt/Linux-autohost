@@ -47,6 +47,11 @@ Different options are available to create a new web site configuration. Two flag
 sudo linux-autohost -n=blog -p=path/to/project
 ```
 
+For more configuration, you can add some more flags.
+
+### Document Root (`-d`)
+
+By adding the `-d` flag, you can indicate the entry directory of your project. For example, many PHP projects use the `/public` directory to store the entry point of your web site. The value of this flag needs to be relative to the path you've provided using `-p` flag.
 
 
 ## Remove an old configuration
