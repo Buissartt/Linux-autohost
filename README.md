@@ -40,13 +40,13 @@ Options :
   ```
 
 # Options
-| Option name       | Flags           | Description                                                                       |
-|-------------------|-----------------|-----------------------------------------------------------------------------------|
-| Name              | -n<br>--name      | This flag is required while he allow you to specify the name of the new project |
-| Source path       | -p<br>--path      | The path flag contains the path from root to your project                       |
-| Document root     | -d<br>--docroot   | This optionnal flag allow you to modify the document root path of the project   |
-| Remove            | -r<br>--remove    | If this flag is specified, the project will be deleted                          |
-| Quiet mode        | -q<br>--quiet     | With quiet mode enable, nothing is written to standart output                   |
-| Database creation | -D<br>--database  | If this flag is used, a mysql database will be created                          |
-| Version           | -V<br>--version   | Display the current version of the script and then exit                         |
-| Help              | -h<br>--help      | Display the help message and then exit                                          |
+| Option name       | Flags             | Required | Description                                                                     |
+|-------------------|:-----------------:|:--------:|---------------------------------------------------------------------------------|
+| Name              | -n<br>--name      | true     | This flag is required while he allow you to specify the name of the new project |
+| Source path       | -p<br>--path      | false    | The path flag contains the path from root to your project                       |
+| Document root     | -d<br>--docroot   | false    | This optionnal flag allow you to modify the document root path of the project   |
+| Remove            | -r<br>--remove    | false    | If this flag is specified, the project will be deleted                          |
+| Quiet mode        | -q<br>--quiet     | false    | With quiet mode enable, nothing is written to standart output                   |
+| Database creation | -D<br>--database  | false    | If this flag is used, a mysql database will be created                          |
+| Version           | -V<br>--version   | false    | Display the current version of the script and then exit                         |
+| Help              | -h<br>--help      | false    | Display the help message and then exit                                          |
