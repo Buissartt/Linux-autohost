@@ -37,7 +37,7 @@ Options :
   -D, --database        (Optional) Quiet mode. Nothing is written to standart output.
   -V, --version         (Optional) Print the script version.
   -h, --help            (Optional) Print the help message.
-  ```
+```
   
 ## New site creation
 Different options are available to create a new web site configuration. Two flags are required : **Name** and **Path**. Name have to provided using the `-n` flag. Then, then path. Using the `-p` flag, you can specify the path of your project on your hard drive.
@@ -53,9 +53,7 @@ For more configuration, you can add some more flags.
 
 By adding the `-d` flag, you can indicate the entry directory of your project. For example, many PHP projects use the `/public` directory to store the entry point of your web site. The value of this flag needs to be relative to the path you've provided using `-p` flag.
 
-
 ## Remove an old configuration
-
 
 # Options
 | Option name       | Flags             | Required                 | Description                                                                     |
