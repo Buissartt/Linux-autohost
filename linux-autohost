@@ -425,6 +425,7 @@ do
 			shift
 		;;
 		-r=*|--remove=*)
+			PROJECT_NAME="${arg#*=}"
 			Remove
 			shift
 			shift
