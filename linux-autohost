@@ -188,6 +188,8 @@ if [[ CREATE_DATABASE -eq 1 ]]; then
 	while [ -z $DATABASE_NAME ]; do
 		read -p "Enter new database name : " DATABASE_NAME
 	done
+	
+	service mysql start
 
 	mysql -u $USERNAME -p -e "create database ${DATABASE_NAME}";
 	if [ $? -eq 0 ]; then
