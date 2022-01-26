@@ -24,9 +24,9 @@ To go into more details, here is the help message which you can retrieve using t
 Usage : linux-autohost [OPTIONS]
 
 Example :
-  linux-autohost -p=/home/user/myproject -n=blog (On Linux and WSL)
-  linux-autohost -p=/mnt/d/Sites/myproject -n=blog (On WSL)
-  linux-autohost -r=blog (On Linux and WSL)
+  linux-autohost -p /home/user/myproject -n blog (On Linux and WSL)
+  linux-autohost -p /mnt/d/Sites/myproject -n blog (On WSL)
+  linux-autohost -r blog (On Linux and WSL)
 
 Options :
   -n, --name            (Required) The name of the new website you want to create.
@@ -44,7 +44,7 @@ Different options are available to create a new web site configuration. Two flag
 > On WSL, you can access your hard drives using the `/mnt` directory.
 
 ```bash
-sudo linux-autohost -n=blog -p=path/to/project
+sudo linux-autohost -n blog -p path/to/project
 ```
 
 For more configuration, you can add some more flags.
