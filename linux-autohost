@@ -162,15 +162,15 @@ else
 fi
 
 # Restart the apache's service
-echo -e "\e[32mInfo \e[39m: Reloading apache2..."
+echo -e "\e[32mInfo \e[39m: Restarting apache2..."
 QuietForceStdOut
-service apache2 reload
+service apache2 restart
 if [ $? -eq 0 ]; then
 	RestoreStdOut
-	echo -e "\e[32mInfo \e[39m: Apache service successfully reloaded"
+	echo -e "\e[32mInfo \e[39m: Apache service successfully restarted"
 else
 	RestoreForceStdOut
-	echo -e "\e[31mError \e[39m: Cannot reload apache service. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
+	echo -e "\e[31mError \e[39m: Cannot restart apache service. Run the command \e[33msudo ${FILE_NAME} -r=${PROJECT_NAME}\e[39m then try again"
 	exit
 fi
 
@@ -346,15 +346,15 @@ Remove()
 		fi
 
 		# Reload le service apache2
-		echo -e "\e[32mInfo \e[39m: Reloading apache2..."
+		echo -e "\e[32mInfo \e[39m: Restarting apache2..."
 		QuietForceStdOut
-		service apache2 reload
+		service apache2 restart
 		if [ $? -eq 0 ]; then
 			RestoreStdOut
-			echo -e "\e[32mInfo \e[39m: apache2 successfully reloaded"
+			echo -e "\e[32mInfo \e[39m: apache2 successfully restarted"
 		else
 			RestoreForceStdOut
-			echo -e "\e[31mError \e[39m: Cannot reload apache service. Try doing it by yourself"
+			echo -e "\e[31mError \e[39m: Cannot restart apache service. Try doing it by yourself"
 			exit
 		fi	
 		RestoreStdOut
