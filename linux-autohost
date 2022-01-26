@@ -259,12 +259,12 @@ Remove()
 	# Faire une vérification par y/n
 	read -p "Important : Are you sure you want to remove the ${PROJECT_NAME} project ? (y/n) " answer
 	compteur=0
-	while ([ -z $answer ] || ([ $answer != "y" ] && [ $answer != "n" ] && [ $answer != "yes" ] && [ $answer != "no" ])) && [ $compteur -lt 2 ]; do
+	while ([ -z $answer ] || ([ $answer != "y" ] && [ $answer != "n" ] && [ $answer != "yes" ] && [ $answer != "no" ] && [ $answer != "Y"] && [ $answer != "N" ] )) && [ $compteur -lt 2 ]; do
 		read -p "Important : Are you sure you want to remove the ${PROJECT_NAME} project ? (y/n) " answer
 		let "compteur++"
 	done
 
-	if [ ! -z $answer ] && ([ $answer = "y" ] || [ $answer = "yes" ]); then
+	if [ ! -z $answer ] && ([ $answer = "y" ] || [ $answer = "yes" ] || [ $answer = "Y" ]); then
 		QuietStdOut
 
 		# Supprimer les fichiers dans /var/www
