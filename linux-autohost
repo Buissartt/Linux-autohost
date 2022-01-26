@@ -53,9 +53,9 @@ Help()
 	echo -e "\e[32mUsage \e[39m: ${FILE_NAME} [OPTIONS]"
 	echo -e ""
 	echo -e "\e[32mExample \e[39m:"
-	echo -e "  ${FILE_NAME} -p=/home/user/myproject -n=blog (On Linux and WSL)"
-	echo -e "  ${FILE_NAME} -p=/mnt/d/Sites/myproject -n=blog (On WSL)"
-	echo -e "  ${FILE_NAME} -r=blog (On Linux and WSL)"
+	echo -e "  ${FILE_NAME} -p /home/user/myproject -n blog (On Linux and WSL)"
+	echo -e "  ${FILE_NAME} -p /mnt/d/Sites/myproject -n blog (On WSL)"
+	echo -e "  ${FILE_NAME} -r blog (On Linux and WSL)"
 	echo -e ""
 	echo -e "\e[32mOptions \e[39m:"
 	echo -e "  -n, --name    	\e[33m(Required)\e[39m The name of the new website you want to create."
@@ -392,61 +392,52 @@ RestoreForceStdOut()
 
 function join { local IFS="$1"; shift; echo "$*"; }
 
-
-for arg in "$@"
-do
-	case $arg in
-		-n=*|--name=*)
-			PROJECT_NAME="${arg#*=}"
-			shift
-			shift
-		;;
-		-p=*|--path=*)
-			PROJECT_PATH="${arg#*=}"
-			# Split string by /
-			PROJECT_PATH=$(echo $PROJECT_PATH | tr "/" "\n")
-			# Join by /
-			PROJECT_PATH=/$(join / ${PROJECT_PATH[@]})
-			shift
-			shift
-		;;
-		-d=*|--docroot=*)
-			DOCUMENT_ROOT="${arg#*=}"
-			if [[ -n $DOCUMENT_ROOT ]]; then
-				# Split string by /
-				DOCUMENT_ROOT=$(echo $DOCUMENT_ROOT | tr "/" "\n")
-				# Join by /
-				DOCUMENT_ROOT=/$(join / ${DOCUMENT_ROOT[@]})
-			fi
-		
-			shift
-			shift
-		;;
-		-D|--database) # Display nothing on the console
-			CREATE_DATABASE=1
-			shift
-		;;
-		-r=*|--remove=*)
-			PROJECT_NAME="${arg#*=}"
-			Remove
-			shift
-			shift
-			exit
-		;;
-		-q|--quiet) # Display nothing on the console
-			IS_QUIET=1
-			QuietStdOut
-			shift
-		;;
-		-h|--help) # display help
-			Help
-			exit
-		;;
-		-V|--version) # display version
-			Version
-			exit
-		;;
+while [ -n "$1" ]; do # while loop starts
+	case "$1" in
+        -n|--name) # Enter a name
+            PROJECT_NAME=$2
+            shift;;
+        -p|--path)
+            PROJECT_PATH=$2
+            # Split string by /
+            PROJECT_PATH=$(echo $PROJECT_PATH | tr "/" "\n")
+            # Join by /
+            PROJECT_PATH=/$(join / ${PROJECT_PATH[@]})
+            shift;;
+        -d|--docroot)
+            DOCUMENT_ROOT=$2
+            if [[ -n $DOCUMENT_ROOT ]]; then
+                # Split string by /
+                DOCUMENT_ROOT=$(echo $DOCUMENT_ROOT | tr "/" "\n")
+                # Join by /
+                DOCUMENT_ROOT=/$(join / ${DOCUMENT_ROOT[@]})
+            fi
+            shift
+            ;;
+        -D|--database)
+            CREATE_DATABASE=1
+            ;;
+        -r|--remove)
+            PROJECT_NAME=$2
+            shift
+            Remove
+            exit
+            ;;
+        -q|--quiet)
+            IS_QUIET=1
+            QuietStdOut
+            ;;
+        -h|--help)
+            Help
+            exit
+            ;;
+        -V|--version)
+            Version
+            exit
+            ;;
+        *) echo "Option $1 not recognized" ;;
 	esac
+	shift
 done
 
 Verif
